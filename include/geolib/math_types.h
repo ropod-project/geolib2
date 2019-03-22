@@ -52,6 +52,12 @@ public:
 
   /// Returns the squared length of the vector
   T length2() const { return x * x + y * y; }
+  
+  /// Returns the distance squared between this point and the other point
+  T dist2( const Vec2T& v ) const { return pow(x - v.x, 2.0) + std::pow(y - v.y, 2.0); }
+  
+  /// Returns the distance squared between this point and the other point
+  T dist( const Vec2T& v ) const { return sqrt( pow(x - v.x, 2.0) + std::pow(y - v.y, 2.0) ); }
 
   /// Returns the normalized version of the vector
   Vec2T normalized() const { T len = length(); return Vec2T(x / len, y / len); }
