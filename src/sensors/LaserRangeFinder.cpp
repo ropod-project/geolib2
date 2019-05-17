@@ -25,7 +25,12 @@ void LaserRangeFinder::RenderResult::renderLine(const Vec2& p1, const Vec2& p2)
     // Get rid of null cases
     if ((p1.x == 0 && p1.y == 0) || (p2.x == 0 && p2.y == 0) || line_length_sq == 0)
         return;
-
+    
+    if( p1.x != p1.x || p1.y != p1.y || p2.x != p2.x || p2.y != p2.y)
+    {
+            std::cout << "NaN-problems, going to skip renderLine. p1, p2 = " << p1 << ", " << p2 << std::endl;
+            return;
+    }
 
     if (lrf_->range_max_ > 0)
     {
@@ -146,7 +151,6 @@ void LaserRangeFinder::render(const LaserRangeFinder::RenderOptions& opt, LaserR
     }
 
     res.lrf_ = this;
-
     const geo::Pose3D& pose = opt.getPose();
 
     double max_radius = opt.getMesh().getMaxRadius();
@@ -196,7 +200,7 @@ void LaserRangeFinder::render(const LaserRangeFinder::RenderOptions& opt, LaserR
             Vec2 p1_3d(Rx.dot(points[it_tri->i1_]) + pose.t.x, Ry.dot(points[it_tri->i1_]) + pose.t.y);
             Vec2 p2_3d(Rx.dot(points[it_tri->i2_]) + pose.t.x, Ry.dot(points[it_tri->i2_]) + pose.t.y);
             Vec2 p3_3d(Rx.dot(points[it_tri->i3_]) + pose.t.x, Ry.dot(points[it_tri->i3_]) + pose.t.y);
-
+            
             // Calculate the distances of the vertices to the plane
             double z1_abs = std::abs(z1);
             double z2_abs = std::abs(z2);
@@ -423,7 +427,7 @@ int LaserRangeFinder::getAngleUpperIndex(double x, double y) const
 
     // Calculate region number (0 - 7)
     int j = (x_abs < y_abs ? 0 : 1) + (x < 0 ? 0 : 2) + (y < 0 ? 0 : 4);
-
+    
     return slope_to_index_[j][k];
 }
 
